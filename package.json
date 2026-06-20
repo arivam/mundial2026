@@ -1,0 +1,15 @@
+{
+  "name": "mundial2026-polla",
+  "version": "1.0.0",
+  "description": "Aplicación web de Polla Mundial 2026 con persistencia en JSON",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx http-server . -p 8080",
+    "init": "node init_data.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrar Apuesta – Polla Mundial 2026</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="nav-bar">
+      <a href="../index.html" class="nav-link">🏠 Inicio</a>
+      <a href="group-stage.html" class="nav-link">⚽ Fase de Grupos</a>
+      <a href="knockout-stage.html" class="nav-link">🏆 Eliminatorias</a>
+      <a href="statistics.html" class="nav-link">📊 Estadísticas</a>
+      <a href="users.html" class="nav-link active">👥 Usuarios</a>
+      <a href="users.html" class="nav-link active">🎫 Apuestas</a>
+    </nav>
+    <div class="header-title">
+      <h1 id="formTitle">📝 Configurar Apuesta</h1>
+    </div>
+    <button class="toggle-theme" id="themeBtn" title="Cambiar tema">🌙</button>
+  </header>
+
+  <main class="container">
+    <form id="betForm" class="card">
+      <div class="form-header">
+        <h2 id="betLabelDisplay">Detalles del Pronóstico</h2>
+        <p id="userDetailsDisplay"></p>
+      </div>
+
+      <div class="bet-sections-grid">
+        <!-- Dieciseisavos (32 equipos) -->
+        <fieldset class="bet-fieldset">
+          <legend>Dieciseisavos (Selecciona 32)</legend>
+          <div id="round32Container" class="checkbox-grid"></div>
+        </fieldset>
+
+        <!-- Octavos -->
+        <fieldset class="bet-fieldset">
+          <legend>Octavos de Final (Selecciona 16)</legend>
+          <div id="round16Container" class="checkbox-grid"></div>
+        </fieldset>
+
+        <!-- Cuartos -->
+        <fieldset class="bet-fieldset">
+          <legend>Cuartos de Final (Selecciona 8)</legend>
+          <div id="quarterfinalsContainer" class="checkbox-grid"></div>
+        </fieldset>
+
+        <!-- Semis y Final -->
+        <fieldset class="bet-fieldset">
+          <legend>Fases Finales</legend>
+          <div class="selection-group">
+            <label>Campeón:</label>
+            <select id="selectChampion" required><option value="">-- Seleccionar --</option></select>
+          </div>
+          <div class="selection-group">
+            <label>Subcampeón:</label>
+            <select id="selectRunnerUp" required><option value="">-- Seleccionar --</option></select>
+          </div>
+          <div class="selection-group">
+            <label>Tercer Puesto:</label>
+            <select id="selectThirdPlace" required><option value="">-- Seleccionar --</option></select>
+          </div>
+          <div class="selection-group">
+            <label>Cuarto Puesto:</label>
+            <select id="selectFourthPlace" required><option value="">-- Seleccionar --</option></select>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">💾 Guardar Pronósticos</button>
+        <a href="users.html" class="btn-secondary">Cancelar</a>
+      </div>
+    </form>
+  </main>
+
+  <footer class="app-footer">
+    <p>Mundial de Fútbol 2026 &mdash; Canada · México · USA</p>
+  </footer>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/betFormInit.js"></script>
+</body>
+</html>

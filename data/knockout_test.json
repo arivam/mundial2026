@@ -1,0 +1,206 @@
+{
+    "roundOf32": [
+        {
+            "id": 73,
+            "homeSource": "1A",
+            "awaySource": "3H",
+            "winnerTo": 89
+        },
+        {
+            "id": 74,
+            "homeSource": "1B",
+            "awaySource": "3G",
+            "winnerTo": 89
+        },
+        {
+            "id": 75,
+            "homeSource": "1C",
+            "awaySource": "3F",
+            "winnerTo": 90
+        },
+        {
+            "id": 76,
+            "homeSource": "1D",
+            "awaySource": "3E",
+            "winnerTo": 90
+        },
+        {
+            "id": 77,
+            "homeSource": "1E",
+            "awaySource": "3D",
+            "winnerTo": 91
+        },
+        {
+            "id": 78,
+            "homeSource": "1F",
+            "awaySource": "3C",
+            "winnerTo": 91
+        },
+        {
+            "id": 79,
+            "homeSource": "1G",
+            "awaySource": "3B",
+            "winnerTo": 92
+        },
+        {
+            "id": 80,
+            "homeSource": "1H",
+            "awaySource": "3A",
+            "winnerTo": 92
+        },
+        {
+            "id": 81,
+            "homeSource": "1I",
+            "awaySource": "2L",
+            "winnerTo": 93
+        },
+        {
+            "id": 82,
+            "homeSource": "1J",
+            "awaySource": "2K",
+            "winnerTo": 93
+        },
+        {
+            "id": 83,
+            "homeSource": "1K",
+            "awaySource": "2J",
+            "winnerTo": 94
+        },
+        {
+            "id": 84,
+            "homeSource": "1L",
+            "awaySource": "2I",
+            "winnerTo": 94
+        },
+        {
+            "id": 85,
+            "homeSource": "2A",
+            "awaySource": "2H",
+            "winnerTo": 95
+        },
+        {
+            "id": 86,
+            "homeSource": "2B",
+            "awaySource": "2G",
+            "winnerTo": 95
+        },
+        {
+            "id": 87,
+            "homeSource": "2C",
+            "awaySource": "2F",
+            "winnerTo": 96
+        },
+        {
+            "id": 88,
+            "homeSource": "2D",
+            "awaySource": "2E",
+            "winnerTo": 96
+        }
+    ],
+    "roundOf16": [
+        {
+            "id": 89,
+            "homeSource": "W73",
+            "awaySource": "W74",
+            "winnerTo": 97
+        },
+        {
+            "id": 90,
+            "homeSource": "W75",
+            "awaySource": "W76",
+            "winnerTo": 97
+        },
+        {
+            "id": 91,
+            "homeSource": "W77",
+            "awaySource": "W78",
+            "winnerTo": 98
+        },
+        {
+            "id": 92,
+            "homeSource": "W79",
+            "awaySource": "W80",
+            "winnerTo": 98
+        },
+        {
+            "id": 93,
+            "homeSource": "W81",
+            "awaySource": "W82",
+            "winnerTo": 99
+        },
+        {
+            "id": 94,
+            "homeSource": "W83",
+            "awaySource": "W84",
+            "winnerTo": 99
+        },
+        {
+            "id": 95,
+            "homeSource": "W85",
+            "awaySource": "W86",
+            "winnerTo": 100
+        },
+        {
+            "id": 96,
+            "homeSource": "W87",
+            "awaySource": "W88",
+            "winnerTo": 100
+        }
+    ],
+    "quarterFinals": [
+        {
+            "id": 97,
+            "homeSource": "W89",
+            "awaySource": "W90",
+            "winnerTo": 101
+        },
+        {
+            "id": 98,
+            "homeSource": "W91",
+            "awaySource": "W92",
+            "winnerTo": 101
+        },
+        {
+            "id": 99,
+            "homeSource": "W93",
+            "awaySource": "W94",
+            "winnerTo": 102
+        },
+        {
+            "id": 100,
+            "homeSource": "W95",
+            "awaySource": "W96",
+            "winnerTo": 102
+        }
+    ],
+    "semiFinals": [
+        {
+            "id": 101,
+            "homeSource": "W97",
+            "awaySource": "W98",
+            "winnerTo": 104,
+            "loserTo": 103
+        },
+        {
+            "id": 102,
+            "homeSource": "W99",
+            "awaySource": "W100",
+            "winnerTo": 104,
+            "loserTo": 103
+        }
+    ],
+    "thirdPlace": [
+        {
+            "id": 103,
+            "homeSource": "L101",
+            "awaySource": "L102"
+        }
+    ],
+    "final": [
+        {
+            "id": 104,
+            "homeSource": "W101",
+            "awaySource": "W102"
+        }
+    ]
+}

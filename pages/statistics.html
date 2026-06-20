@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resumen y Estadísticas – Polla Mundial 2026</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+  <!-- Chart.js CDN (lightweight) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <nav class="nav-bar">
+      <a href="../index.html" class="nav-link">🏠 Inicio</a>
+      <a href="group-stage.html" class="nav-link">⚽ Fase de Grupos</a>
+      <a href="knockout-stage.html" class="nav-link">🏆 Eliminatorias</a>
+      <a href="statistics.html" class="nav-link active">📊 Estadísticas</a>
+      <a href="users.html" class="nav-link">👥 Usuarios</a>
+      <a href="users.html" class="nav-link">🎫 Apuestas</a>
+    </nav>
+    <div class="header-title">
+      <h1>📊 Estadísticas</h1>
+    </div>
+    <button class="toggle-theme" id="themeBtn" title="Cambiar tema">🌙</button>
+  </header>
+  <main class="stats-container">
+    <section class="chart-section">
+      <h2>Ranking de Usuarios</h2>
+      <canvas id="rankingChart" width="400" height="200"></canvas>
+      <button id="exportCsv">Exportar CSV</button>
+<table id="rankingTable" class="ranking-table">
+  <thead>
+    <tr>
+      <th>Usuario (Apuesta)</th>
+      <th title="Dieciseisavos">R32</th>
+      <th title="Octavos">R16</th>
+      <th title="Cuartos">QF</th>
+      <th title="Semifinales">SF</th>
+      <th title="Final">F</th>
+      <th title="Cuarto Puesto">4º</th>
+      <th title="Tercer Puesto">3º</th>
+      <th title="Subcampeón">Sub.</th>
+      <th title="Campeón">Camp.</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+    </section>
+    <section class="chart-section">
+      <h2>Goles por Fase</h2>
+      <canvas id="goalsChart" width="400" height="200"></canvas>
+    </section>
+  </main>
+  <footer class="app-footer">
+    <p>Mundial de Fútbol 2026 &mdash; Canada · México · USA</p>
+  </footer>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/statisticsInit.js"></script>
+</body>
+</html>

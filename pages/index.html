@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polla Mundial 2026</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+<header>
+  <nav class="nav-bar">
+    <a href="index.html" class="button">Inicio</a>
+    <a href="group-stage.html" class="button">Fase de Grupos</a>
+    <a href="statistics.html" class="button">Estadísticas</a>
+    <a href="users.html" class="button">Usuarios y Apuestas</a>
+  </nav>
+  <h1>Polla Mundial 2026</h1>
+  <button class="toggle-theme" id="themeBtn">🌙</button>
+</header>
+  <main>
+<section id="welcome" class="card">
+  <h2>Bienvenido</h2>
+  <p>Esta es la aplicación de Polla Mundial 2026. Usa el menú para navegar.</p>
+  </section>
+
+  <!-- Teams Table -->
+  <section id="teams-section" class="card">
+    <h2>Equipos</h2>
+    <table class="data-table" id="teams-table">
+      <thead><tr><th>ID</th><th>Nombre</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <!-- Groups Table -->
+<section id="groups-section" class="card">
+  <h2>Grupos</h2>
+  <img src="file:///C:/Users/User/.gemini/antigravity-ide/brain/9267c551-402b-49a1-8507-ff148a0c94ed/groups_visual_1780706414800.png" alt="Visualización de los grupos" class="group-image" />
+</section>
+
+<!-- Generic confirmation modal -->
+<div class="modal-overlay" id="genericModal">
+  <div class="modal">
+    <div class="modal-header">Confirmación</div>
+    <div class="modal-body" id="modalMessage"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="modalCancel">Cancelar</button>
+      <button class="btn-primary" id="modalOk">OK</button>
+    </div>
+  </div>
+</div>
+    <section id="data-output">
+      <h2>Datos cargados</h2>
+      <pre id="jsonData">Cargando...</pre>
+    </section>
+  </main>
+  <script src="../js/main.js"></script>
+  <script src="../js/indexInit.js"></script>
+</body>
+</html>

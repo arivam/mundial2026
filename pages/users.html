@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usuarios y Apuestas – Polla Mundial 2026</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="nav-bar">
+      <a href="../index.html" class="nav-link">🏠 Inicio</a>
+      <a href="group-stage.html" class="nav-link">⚽ Fase de Grupos</a>
+      <a href="knockout-stage.html" class="nav-link">🏆 Eliminatorias</a>
+      <a href="statistics.html" class="nav-link">📊 Estadísticas</a>
+      <a href="users.html" class="nav-link active">👥 Usuarios</a>
+      <a href="users.html" class="nav-link active">🎫 Apuestas</a>
+    </nav>
+    <div class="header-title">
+      <h1>👥 Gestión de Usuarios y Apuestas</h1>
+    </div>
+    <button class="toggle-theme" id="themeBtn" title="Cambiar tema">🌙</button>
+  </header>
+
+  <main class="container">
+    <section id="userRegistration" class="card">
+      <h2>📝 Registrar Nuevo Participante</h2>
+      <form id="userForm" class="form-grid">
+        <div class="form-group">
+          <label for="userName">Nombre (Obligatorio):</label>
+          <input type="text" id="userName" required placeholder="Ej. Andrés Vargas">
+        </div>
+        <div class="form-group">
+          <label for="userEmail">Correo (Opcional):</label>
+          <input type="email" id="userEmail" placeholder="correo@ejemplo.com">
+        </div>
+        <div class="form-group">
+          <label for="userPhone">Teléfono (Opcional):</label>
+          <input type="tel" id="userPhone" placeholder="+57 ...">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Registrar Usuario</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="usersListSection" class="card">
+      <h2>📋 Participantes Registrados</h2>
+      <div class="table-container">
+        <table id="usersTable" class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Contacto</th>
+              <th>Apuestas</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Mundial de Fútbol 2026 &mdash; Canada · México · USA</p>
+  </footer>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/usersInit.js"></script>
+</body>
+</html>

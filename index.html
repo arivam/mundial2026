@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Polla Mundial 2026 – Participa en el torneo de pronósticos del Mundial de Fútbol 2026." />
+  <title>Polla Mundial 2026</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="nav-bar">
+      <a href="index.html" class="nav-link active">🏠 Inicio</a>
+      <a href="pages/group-stage.html" class="nav-link">⚽ Fase de Grupos</a>
+      <a href="pages/knockout-stage.html" class="nav-link">🏆 Eliminatorias</a>
+      <a href="pages/statistics.html" class="nav-link">📊 Estadísticas</a>
+      <a href="pages/users.html" class="nav-link">👥 Usuarios</a>
+      <a href="pages/users.html" class="nav-link">🎫 Apuestas</a>
+    </nav>
+    <div class="header-title">
+      <h1>🌍 Polla Mundial 2026</h1>
+    </div>
+    <button class="toggle-theme" id="themeBtn" title="Cambiar tema">🌙</button>
+  </header>
+
+  <main>
+    <!-- Banner de bienvenida -->
+    <section id="welcome" class="hero-section">
+      <div class="hero-content">
+        <h2>¡Bienvenido a la Polla Mundial 2026!</h2>
+        <p>Realiza tus pronósticos, sigue los resultados en tiempo real y compite con tus amigos en el torneo de pronósticos más emocionante del año.</p>
+        <div class="hero-buttons">
+          <a href="pages/group-stage.html" class="btn-primary">Ver Fase de Grupos</a>
+          <a href="pages/knockout-stage.html" class="btn-secondary">Ver Eliminatorias</a>
+          <a href="pages/users.html" class="btn-primary" style="background-color: var(--color-primary-dark);">Participar en la Polla</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Grupos del torneo -->
+    <section id="groups-section" class="card">
+      <h2>⚽ Grupos del Torneo</h2>
+      <div id="groupsGrid" class="groups-grid">
+        <p class="loading-text">Cargando grupos...</p>
+      </div>
+    </section>
+
+    <!-- Equipos participantes -->
+    <section id="teams-section" class="card">
+      <h2>🌐 Equipos Participantes</h2>
+      <div id="teamsGrid" class="teams-grid">
+        <p class="loading-text">Cargando equipos...</p>
+      </div>
+    </section>
+
+    <!-- Centro de Datos (Backup & Restore) -->
+    <section id="data-center" class="card">
+      <h2>💾 Gestión de Datos (Copia de Seguridad)</h2>
+      <p>Usa estas opciones para guardar tus progresos en un archivo real o restaurar una copia previa.</p>
+      <div class="data-actions">
+        <button id="btnExport" class="btn-secondary">📤 Exportar copia de seguridad</button>
+        <div class="import-wrapper">
+          <label for="importFile" class="btn-primary" style="display:inline-block; cursor:pointer;">📥 Importar Copia de Seguridad</label>
+          <input type="file" id="importFile" accept=".json" style="display:none;">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Mundial de Fútbol 2026 &mdash; Canada · México · USA</p>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/homeInit.js"></script>
+</body>
+</html>

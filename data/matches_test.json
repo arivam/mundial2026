@@ -1,0 +1,722 @@
+[
+    {
+        "id": 1,
+        "group": "A",
+        "matchday": 1,
+        "homeTeamId": 2,
+        "awayTeamId": 4,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 2,
+        "group": "A",
+        "matchday": 1,
+        "homeTeamId": 3,
+        "awayTeamId": 1,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 3,
+        "group": "A",
+        "matchday": 2,
+        "homeTeamId": 2,
+        "awayTeamId": 3,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 4,
+        "group": "A",
+        "matchday": 2,
+        "homeTeamId": 4,
+        "awayTeamId": 1,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 5,
+        "group": "A",
+        "matchday": 3,
+        "homeTeamId": 2,
+        "awayTeamId": 1,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 6,
+        "group": "A",
+        "matchday": 3,
+        "homeTeamId": 4,
+        "awayTeamId": 3,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 7,
+        "group": "B",
+        "matchday": 1,
+        "homeTeamId": 6,
+        "awayTeamId": 5,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 8,
+        "group": "B",
+        "matchday": 1,
+        "homeTeamId": 7,
+        "awayTeamId": 8,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 9,
+        "group": "B",
+        "matchday": 2,
+        "homeTeamId": 6,
+        "awayTeamId": 7,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 10,
+        "group": "B",
+        "matchday": 2,
+        "homeTeamId": 5,
+        "awayTeamId": 8,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 11,
+        "group": "B",
+        "matchday": 3,
+        "homeTeamId": 6,
+        "awayTeamId": 8,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 12,
+        "group": "B",
+        "matchday": 3,
+        "homeTeamId": 5,
+        "awayTeamId": 7,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 13,
+        "group": "C",
+        "matchday": 1,
+        "homeTeamId": 9,
+        "awayTeamId": 11,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 14,
+        "group": "C",
+        "matchday": 1,
+        "homeTeamId": 10,
+        "awayTeamId": 12,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 15,
+        "group": "C",
+        "matchday": 2,
+        "homeTeamId": 9,
+        "awayTeamId": 10,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 16,
+        "group": "C",
+        "matchday": 2,
+        "homeTeamId": 11,
+        "awayTeamId": 12,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 17,
+        "group": "C",
+        "matchday": 3,
+        "homeTeamId": 9,
+        "awayTeamId": 12,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 18,
+        "group": "C",
+        "matchday": 3,
+        "homeTeamId": 11,
+        "awayTeamId": 10,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 19,
+        "group": "D",
+        "matchday": 1,
+        "homeTeamId": 16,
+        "awayTeamId": 14,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 20,
+        "group": "D",
+        "matchday": 1,
+        "homeTeamId": 13,
+        "awayTeamId": 15,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 21,
+        "group": "D",
+        "matchday": 2,
+        "homeTeamId": 16,
+        "awayTeamId": 13,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 22,
+        "group": "D",
+        "matchday": 2,
+        "homeTeamId": 14,
+        "awayTeamId": 15,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 23,
+        "group": "D",
+        "matchday": 3,
+        "homeTeamId": 16,
+        "awayTeamId": 15,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 24,
+        "group": "D",
+        "matchday": 3,
+        "homeTeamId": 14,
+        "awayTeamId": 13,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 25,
+        "group": "E",
+        "matchday": 1,
+        "homeTeamId": 19,
+        "awayTeamId": 17,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 26,
+        "group": "E",
+        "matchday": 1,
+        "homeTeamId": 20,
+        "awayTeamId": 18,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 27,
+        "group": "E",
+        "matchday": 2,
+        "homeTeamId": 19,
+        "awayTeamId": 20,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 28,
+        "group": "E",
+        "matchday": 2,
+        "homeTeamId": 17,
+        "awayTeamId": 18,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 29,
+        "group": "E",
+        "matchday": 3,
+        "homeTeamId": 19,
+        "awayTeamId": 18,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 30,
+        "group": "E",
+        "matchday": 3,
+        "homeTeamId": 17,
+        "awayTeamId": 20,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 31,
+        "group": "F",
+        "matchday": 1,
+        "homeTeamId": 22,
+        "awayTeamId": 21,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 32,
+        "group": "F",
+        "matchday": 1,
+        "homeTeamId": 23,
+        "awayTeamId": 24,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 33,
+        "group": "F",
+        "matchday": 2,
+        "homeTeamId": 22,
+        "awayTeamId": 23,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 34,
+        "group": "F",
+        "matchday": 2,
+        "homeTeamId": 21,
+        "awayTeamId": 24,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 35,
+        "group": "F",
+        "matchday": 3,
+        "homeTeamId": 22,
+        "awayTeamId": 24,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 36,
+        "group": "F",
+        "matchday": 3,
+        "homeTeamId": 21,
+        "awayTeamId": 23,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 37,
+        "group": "G",
+        "matchday": 1,
+        "homeTeamId": 25,
+        "awayTeamId": 26,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 38,
+        "group": "G",
+        "matchday": 1,
+        "homeTeamId": 27,
+        "awayTeamId": 28,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 39,
+        "group": "G",
+        "matchday": 2,
+        "homeTeamId": 25,
+        "awayTeamId": 27,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 40,
+        "group": "G",
+        "matchday": 2,
+        "homeTeamId": 26,
+        "awayTeamId": 28,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 41,
+        "group": "G",
+        "matchday": 3,
+        "homeTeamId": 25,
+        "awayTeamId": 28,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 42,
+        "group": "G",
+        "matchday": 3,
+        "homeTeamId": 26,
+        "awayTeamId": 27,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 43,
+        "group": "H",
+        "matchday": 1,
+        "homeTeamId": 31,
+        "awayTeamId": 29,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 44,
+        "group": "H",
+        "matchday": 1,
+        "homeTeamId": 30,
+        "awayTeamId": 32,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 45,
+        "group": "H",
+        "matchday": 2,
+        "homeTeamId": 31,
+        "awayTeamId": 30,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 46,
+        "group": "H",
+        "matchday": 2,
+        "homeTeamId": 29,
+        "awayTeamId": 32,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 47,
+        "group": "H",
+        "matchday": 3,
+        "homeTeamId": 31,
+        "awayTeamId": 32,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 48,
+        "group": "H",
+        "matchday": 3,
+        "homeTeamId": 29,
+        "awayTeamId": 30,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 49,
+        "group": "I",
+        "matchday": 1,
+        "homeTeamId": 33,
+        "awayTeamId": 36,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 50,
+        "group": "I",
+        "matchday": 1,
+        "homeTeamId": 34,
+        "awayTeamId": 35,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 51,
+        "group": "I",
+        "matchday": 2,
+        "homeTeamId": 33,
+        "awayTeamId": 34,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 52,
+        "group": "I",
+        "matchday": 2,
+        "homeTeamId": 36,
+        "awayTeamId": 35,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 53,
+        "group": "I",
+        "matchday": 3,
+        "homeTeamId": 33,
+        "awayTeamId": 35,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 54,
+        "group": "I",
+        "matchday": 3,
+        "homeTeamId": 36,
+        "awayTeamId": 34,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 55,
+        "group": "J",
+        "matchday": 1,
+        "homeTeamId": 38,
+        "awayTeamId": 37,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 56,
+        "group": "J",
+        "matchday": 1,
+        "homeTeamId": 39,
+        "awayTeamId": 40,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 57,
+        "group": "J",
+        "matchday": 2,
+        "homeTeamId": 38,
+        "awayTeamId": 39,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 58,
+        "group": "J",
+        "matchday": 2,
+        "homeTeamId": 37,
+        "awayTeamId": 40,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 59,
+        "group": "J",
+        "matchday": 3,
+        "homeTeamId": 38,
+        "awayTeamId": 40,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 60,
+        "group": "J",
+        "matchday": 3,
+        "homeTeamId": 37,
+        "awayTeamId": 39,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 61,
+        "group": "K",
+        "matchday": 1,
+        "homeTeamId": 43,
+        "awayTeamId": 42,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 62,
+        "group": "K",
+        "matchday": 1,
+        "homeTeamId": 44,
+        "awayTeamId": 41,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 63,
+        "group": "K",
+        "matchday": 2,
+        "homeTeamId": 43,
+        "awayTeamId": 44,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 64,
+        "group": "K",
+        "matchday": 2,
+        "homeTeamId": 42,
+        "awayTeamId": 41,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 65,
+        "group": "K",
+        "matchday": 3,
+        "homeTeamId": 43,
+        "awayTeamId": 41,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 66,
+        "group": "K",
+        "matchday": 3,
+        "homeTeamId": 42,
+        "awayTeamId": 44,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 67,
+        "group": "L",
+        "matchday": 1,
+        "homeTeamId": 46,
+        "awayTeamId": 45,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 68,
+        "group": "L",
+        "matchday": 1,
+        "homeTeamId": 47,
+        "awayTeamId": 48,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 69,
+        "group": "L",
+        "matchday": 2,
+        "homeTeamId": 46,
+        "awayTeamId": 47,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 70,
+        "group": "L",
+        "matchday": 2,
+        "homeTeamId": 45,
+        "awayTeamId": 48,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 71,
+        "group": "L",
+        "matchday": 3,
+        "homeTeamId": 46,
+        "awayTeamId": 48,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    },
+    {
+        "id": 72,
+        "group": "L",
+        "matchday": 3,
+        "homeTeamId": 45,
+        "awayTeamId": 47,
+        "homeScore": null,
+        "awayScore": null,
+        "played": false
+    }
+]

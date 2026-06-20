@@ -1,0 +1,15 @@
+[
+  {
+    "id": 987654321,
+    "userId": 123456789,
+    "betLabel": "Apuesta Inicial Test",
+    "round32": [1, 2, 3, 4],
+    "round16": [1, 2],
+    "quarterfinals": [1],
+    "semifinals": [],
+    "final": [],
+    "champion": 1,
+    "runnerUp": 2,
+    "score": 0
+  }
+]
