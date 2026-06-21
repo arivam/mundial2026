@@ -1,8 +1,9 @@
 node_modules/
-*.db
+//*.db
 *.db-wal
 *.db-shm
 dist/
 .DS_Store
 Thumbs.db
 .git
+nul
