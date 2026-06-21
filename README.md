@@ -50,10 +50,21 @@ Mundial2026/
 ├── data/             # Archivos JSON de datos
 │   ├── teams.json, groups.json, matches.json, knockout.json
 │   ├── users.json, bets.json, standings.json
-│   └── *_test.json   # Datos para modo de prueba (?mode=test)
+│   ├── *_test.json   # Datos para modo de prueba (?mode=test)
+│   ├── polla2026.db  # Base de datos SQLite (se genera automáticamente)
+│   └── annex_c_table.json, REPORTE POLLA 2026 (1).html
+├── lib/
+│   └── scoring.js    # Lógica de puntuación
+├── vendor/           # Librerías de terceros (Chart.js, jsPDF)
+├── __tests__/
+│   └── scoring.test.js  # Pruebas unitarias de puntuación
+├── Context/          # Documentación y plan de implementación
+├── AGENTS.md         # Instrucciones para asistentes IA (OpenCode)
 ├── css/styles.css
 ├── init_data.js      # Script para crear archivos JSON vacíos
-└── migrate-bets.js   # Script para importar apuestas desde HTML
+├── migrate-bets.js   # Script para importar apuestas desde HTML
+├── parse_annex_c.js  # Script para parsear tabla de datos auxiliar
+└── .gitignore
 ```
 
 ## Dependencias
