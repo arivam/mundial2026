@@ -10,7 +10,7 @@ export class Match {
    * @param {number} homeGoals - Goals scored by home team (default 0)
    * @param {number} awayGoals - Goals scored by away team (default 0)
    */
-  constructor(id, homeTeam, awayTeam, date, homeGoals = 0, awayGoals = 0) {
+  constructor(id, homeTeam, awayTeam, date, homeGoals = null, awayGoals = null) {
     this.id = id;
     this.homeTeam = homeTeam;
     this.awayTeam = awayTeam;
@@ -23,6 +23,13 @@ export class Match {
   setResult(homeGoals, awayGoals) {
     this.homeGoals = homeGoals;
     this.awayGoals = awayGoals;
+  }
+
+  /** Returns true if the match has been played (goals were set) */
+  isPlayed() {
+    return this.homeGoals !== null && this.homeGoals !== undefined &&
+           this.awayGoals !== null && this.awayGoals !== undefined &&
+           typeof this.homeGoals === 'number' && typeof this.awayGoals === 'number';
   }
 }
 

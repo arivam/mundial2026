@@ -46,13 +46,7 @@ function setupDataCenter() {
 
       const reader = new FileReader();
       reader.onload = (event) => {
-        const success = importTournamentData(event.target.result);
-        if (success) {
-          alert('✅ Datos importados correctamente. La página se recargará.');
-          window.location.reload();
-        } else {
-          alert('❌ Error al importar el archivo. Verifica el formato.');
-        }
+        importTournamentData(event.target.result);
       };
       reader.readAsText(file);
     });
@@ -114,8 +108,6 @@ function renderTeamsGrid(teams) {
   if (!container) return;
 
   container.innerHTML = '';
-  teams.forEach(team => {
-  });
 
   // Ordenar alfabéticamente por nombre de equipo
   const sortedTeams = [...teams].sort((a, b) => a.name.localeCompare(b.name));

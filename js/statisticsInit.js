@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Restaurar marcadores desde localStorage
-  const savedMatches = loadFromStorage('matches');
+  const savedMatches = await loadFromStorage('matches');
   if (savedMatches) {
     savedMatches.forEach(saved => {
       const m = matches.find(x => x.id === saved.id);
@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   teams.forEach(t => { teamMap[t.id] = t; });
 
   // Cargar datos de usuarios y apuestas (desde storage o JSON inicial)
-  let users = loadFromStorage('users') || [];
-  let bets = loadFromStorage('bets') || [];
+  let users = await loadFromStorage('users') || [];
+  let bets = await loadFromStorage('bets') || [];
 
   if (users.length === 0) {
     try { users = await loadData('users', ROOT); } catch(e) {}
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (bets.length > 0) saveToStorage('bets', bets);
   }
 
-  const knockoutResults = loadFromStorage('knockout') || {};
+  const knockoutResults = await loadFromStorage('knockout') || {};
   let bracket = {};
   try {
     bracket = await loadData('knockout', ROOT);
@@ -278,8 +278,9 @@ function renderRankingTable(users, bets, actualTeams) {
     };
   }).sort((a, b) => b.score.total - a.score.total);
 
-  tbody.innerHTML = ranking.map(r => `
-    <tr>
+  tbody.innerHTML = ranking.map((r, i) => `
+    <tr${i < 3 ? ' class="top-three"' : ''}>
+      <td class="pos-cell">${i + 1}</td>
       <td><strong>${r.name}</strong><br><small>${r.label}</small></td>
       <td>${r.score.r32}</td>
       <td>${r.score.r16}</td>
@@ -297,7 +298,10 @@ function renderRankingTable(users, bets, actualTeams) {
 
 function renderRankingChart(users, bets, actualTeams) {
   const canvas = document.getElementById('rankingChart');
-  if (!canvas) return;
+  if (!canvas || typeof Chart === 'undefined') {
+    if (canvas) canvas.style.display = 'none';
+    return;
+  }
 
   const data = bets.map(bet => {
     const user = users.find(u => u.id === bet.userId);
@@ -324,22 +328,66 @@ function renderRankingChart(users, bets, actualTeams) {
 }
 
 function setupExport(users, bets, actualTeams) {
-  const btn = document.getElementById('exportCsv');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    const header = "Usuario,Apuesta,R32,R16,QF,SF,F,4o,3o,Sub,Camp,Total\n";
-    const csv = bets.map(bet => {
-      const user = users.find(u => u.id === bet.userId);
-      const s = calculateBetScore(bet, actualTeams);
-      return `"${user ? user.name : 'Anónimo'}","${bet.betLabel}",${s.r32},${s.r16},${s.rQF},${s.rSF},${s.rF},${s.fourth},${s.third},${s.runnerUp},${s.champion},${s.total}`;
-    }).join("\n");
+  // CSV
+  const csvBtn = document.getElementById('exportCsv');
+  if (csvBtn) {
+    csvBtn.addEventListener('click', () => {
+      const header = "Usuario,Apuesta,R32,R16,QF,SF,F,4o,3o,Sub,Camp,Total\n";
+      const csv = bets.map(bet => {
+        const user = users.find(u => u.id === bet.userId);
+        const s = calculateBetScore(bet, actualTeams);
+        return `"${user ? user.name : 'Anónimo'}","${bet.betLabel}",${s.r32},${s.r16},${s.rQF},${s.rSF},${s.rF},${s.fourth},${s.third},${s.runnerUp},${s.champion},${s.total}`;
+      }).join("\n");
 
-    const blob = new Blob([header + csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.setAttribute("download", "ranking_polla_2026.csv");
-    link.click();
-  });
+      const blob = new Blob([header + csv], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute("download", "ranking_polla_2026.csv");
+      link.click();
+    });
+  }
+
+  // PDF
+  const pdfBtn = document.getElementById('exportPdf');
+  if (pdfBtn && typeof jspdf !== 'undefined') {
+    pdfBtn.addEventListener('click', () => {
+      const { jsPDF } = jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+      doc.setFontSize(16);
+      doc.text('Ranking Polla Mundial 2026', 14, 15);
+
+      doc.setFontSize(9);
+      doc.text(`Generado: ${new Date().toLocaleString('es')}`, 14, 22);
+
+      const ranking = bets.map(bet => {
+        const user = users.find(u => u.id === bet.userId);
+        const s = calculateBetScore(bet, actualTeams);
+        return [
+          user ? user.name : 'Anónimo',
+          bet.betLabel,
+          s.r32, s.r16, s.rQF, s.rSF, s.rF,
+          s.fourth, s.third, s.runnerUp, s.champion,
+          s.total
+        ];
+      }).sort((a, b) => b[11] - a[11]);
+
+      doc.autoTable({
+        startY: 26,
+        head: [['#', 'Usuario', 'Apuesta', 'R32', 'R16', 'QF', 'SF', 'F', '4º', '3º', 'Sub', 'Camp', 'Total']],
+        body: ranking.map((r, i) => [i + 1, ...r]),
+        styles: { fontSize: 7, cellPadding: 2 },
+        headStyles: { fillColor: [41, 128, 185] },
+        alternateRowStyles: { fillColor: [245, 248, 250] },
+        columnStyles: {
+          0: { cellWidth: 10 },
+          12: { fontStyle: 'bold' }
+        }
+      });
+
+      doc.save('ranking_polla_2026.pdf');
+    });
+  }
 }
 
 /**

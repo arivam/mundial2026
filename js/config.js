@@ -1,43 +1,55 @@
-// js/config.js
-// Configuración centralizada: modo de la app (producción vs test).
-// El modo se determina a partir del parámetro ?mode=test en la URL.
-
 (function (global) {
   const params = new URLSearchParams(window.location.search);
   global.APP_MODE = params.get('mode') === 'test' ? 'test' : 'production';
 
-  /**
-   * Devuelve la ruta correcta a un archivo JSON en /data,
-   * añadiendo el sufijo _test si el modo es 'test'.
-   * @param {string} baseName  Nombre base del archivo (sin extensión, sin sufijo)
-   * @param {string} [root='']  Prefijo de ruta relativo al documento actual
-   * @returns {string} ruta completa al .json
-   */
+  const hasApi = typeof global.api !== 'undefined' && global.api;
+
   global.dataPath = function (baseName, root = '') {
     const suffix = global.APP_MODE === 'test' ? '_test' : '';
     return `${root}data/${baseName}${suffix}.json`;
   };
 
-  /**
-   * Fetch wrapper que carga un JSON del directorio /data.
-   * @param {string} baseName  Nombre base del archivo (sin extensión, sin sufijo)
-   * @param {string} [root=''] Prefijo de ruta relativo al documento actual
-   * @returns {Promise<any>}
-   */
-  global.loadData = function (baseName, root = '') {
+  global.loadData = async function (baseName, root = '') {
+    if (hasApi) {
+      if (baseName === 'knockout') {
+        return await global.api.getData('knockout');
+      }
+      return await global.api.getData(baseName);
+    }
     const url = global.dataPath(baseName, root);
-    return fetch(url).then(r => {
-      if (!r.ok) throw new Error(`No se pudo cargar ${url} (${r.status})`);
-      return r.json();
-    });
+    try {
+      const r = await fetch(url);
+      if (!r.ok) throw new Error(`No se pudo cargar ${url}`);
+      return await r.json();
+    } catch (e) {
+      console.warn('loadData fetch failed, trying XHR:', e.message);
+    }
+    try {
+      return await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onload = () => {
+          if (xhr.status === 0 || xhr.status === 200) {
+            try { resolve(JSON.parse(xhr.responseText)); }
+            catch (err) { reject(err); }
+          } else {
+            reject(new Error(`XHR failed: ${xhr.status}`));
+          }
+        };
+        xhr.onerror = () => reject(new Error('XHR error'));
+        xhr.send();
+      });
+    } catch (e) {
+      console.warn('loadData XHR fallback also failed:', e.message);
+      return null;
+    }
   };
 
-  /**
-   * Guarda datos en localStorage con el sufijo de modo.
-   * @param {string} key
-   * @param {any} value
-   */
   global.saveToStorage = function (key, value) {
+    if (hasApi) {
+      global.api.saveData(key, value);
+      return;
+    }
     try {
       localStorage.setItem(`${key}_${global.APP_MODE}`, JSON.stringify(value));
     } catch (e) {
@@ -45,27 +57,40 @@
     }
   };
 
-  /**
-   * Carga datos de localStorage considerando el modo actual.
-   * @param {string} key
-   */
-  global.loadFromStorage = function (key) {
+  global.loadFromStorage = async function (key) {
+    if (hasApi) {
+      if (key === 'matches') return null;
+      if (key === 'knockout') {
+        return await global.api.getData('knockout-results');
+      }
+      const data = await global.api.getData(key);
+      return data;
+    }
     try {
       const raw = localStorage.getItem(`${key}_${global.APP_MODE}`);
       return raw ? JSON.parse(raw) : null;
     } catch { return null; }
   };
 
-  /**
-   * Agrupa todos los datos de localStorage y los descarga como un archivo JSON.
-   */
   global.exportTournamentData = function () {
+    if (hasApi) {
+      global.api.exportAll().then(data => {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.href = url;
+        a.download = 'backup_polla_2026.json';
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+      return;
+    }
     const keys = ['matches', 'knockout', 'users', 'bets'];
     const backup = {};
-    keys.forEach(k => {
-      backup[k] = global.loadFromStorage(k);
-    });
-
+    keys.forEach(k => { backup[k] = global.loadFromStorage(k); });
     const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -78,20 +103,28 @@
     URL.revokeObjectURL(url);
   };
 
-  /**
-   * Recibe un string JSON y restaura los datos en localStorage.
-   * @param {string} jsonString
-   */
   global.importTournamentData = function (jsonString) {
+    if (hasApi) {
+      global.api.importAll(jsonString).then(result => {
+        if (result.success) {
+          alert('Datos importados correctamente. La página se recargará.');
+          window.location.reload();
+        } else {
+          alert('Error al importar el archivo. Verifica el formato.');
+        }
+      });
+      return;
+    }
     try {
       const data = JSON.parse(jsonString);
       Object.entries(data).forEach(([key, value]) => {
         if (value) global.saveToStorage(key, value);
       });
-      return true;
+      alert('Datos importados correctamente. La página se recargará.');
+      window.location.reload();
     } catch (e) {
       console.error('Error en la importación:', e);
-      return false;
+      alert('Error al importar el archivo. Verifica el formato.');
     }
   };
 })(window);

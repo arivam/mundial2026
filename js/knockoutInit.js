@@ -6,14 +6,15 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const ROOT = '../';
 
-  let bracket, teams, groups, groupMatches;
+  let bracket, teams, groups, groupMatches, annexCTable;
 
   try {
-    [bracket, teams, groups, groupMatches] = await Promise.all([
+    [bracket, teams, groups, groupMatches, annexCTable] = await Promise.all([
       loadData('knockout', ROOT),
       loadData('teams', ROOT),
       loadData('groups', ROOT),
-      loadData('matches', ROOT)
+      loadData('matches', ROOT),
+      loadData('annex_c_table', ROOT)
     ]);
   } catch (err) {
     console.error('Error cargando datos de eliminatorias:', err);
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Mezclar resultados guardados de fase de grupos para calcular posiciones actuales
-  const savedGroupMatches = loadFromStorage('matches');
+  const savedGroupMatches = await loadFromStorage('matches');
   if (savedGroupMatches) {
     savedGroupMatches.forEach(saved => {
       const m = groupMatches.find(x => x.id === saved.id);
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Recuperar resultados guardados en localStorage
-  const savedResults = loadFromStorage('knockout') || {};
+  const savedResults = await loadFromStorage('knockout') || {};
 
   // Mapa equipo por id
   const teamMap = {};
@@ -40,8 +41,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Calcular posiciones actuales de los grupos
   const standings = calculateStandings(groups, groupMatches, teamMap);
 
-  renderBracket(bracket, teamMap, savedResults, standings);
-  setupSaveHandlers(bracket, teamMap, savedResults, standings);
+  // Resolver terceros puestos (mejores 8 de 12 grupos)
+  const thirdPlaceMap = resolveThirdPlaceMap(standings, teamMap, annexCTable);
+
+  renderBracket(bracket, teamMap, savedResults, standings, thirdPlaceMap);
+  setupSaveHandlers(bracket, teamMap, savedResults, standings, thirdPlaceMap);
 });
 
 /* ────────────── Renderizado del bracket ────────────── */
@@ -57,7 +61,86 @@ const ROUND_LABELS = {
 
 const ROUND_ORDER = ['roundOf32', 'roundOf16', 'quarterFinals', 'semiFinals', 'thirdPlace', 'final'];
 
-function renderBracket(bracket, teamMap, savedResults, standings) {
+/**
+ * Calcula los mejores terceros puestos y resuelve qué equipo va a cada llave
+ * usando la tabla Annex C de FIFA (495 combinaciones).
+ * Retorna un mapa { matchId: nombreEquipo } para los partidos R32 con terceros.
+ */
+function resolveThirdPlaceMap(standings, teamMap, annexCTable) {
+  const map = {};
+
+  // 1. Recoger los terceros de cada grupo
+  const thirds = [];
+  Object.keys(standings).forEach(groupName => {
+    const pos = standings[groupName];
+    if (pos && pos[2]) {
+      thirds.push({
+        teamId: pos[2].teamId,
+        group: groupName,
+        played: pos[2].played,
+        points: pos[2].points,
+        gf: pos[2].goalsFor,
+        ga: pos[2].goalsAgainst,
+        gd: pos[2].goalsFor - pos[2].goalsAgainst
+      });
+    }
+  });
+
+  // 2. Verificar que todos los grupos tengan al menos 2 partidos jugados
+  const allGroupsPlayed = thirds.every(t => t.played >= 2);
+  if (!allGroupsPlayed || thirds.length < 12) return map;
+
+  // 3. Rankear terceros: puntos → diferencia goles → goles favor
+  thirds.sort((a, b) => b.points - a.points || b.gd - a.gd || b.gf - a.gf);
+
+  // 4. Seleccionar los 8 mejores
+  const top8 = thirds.slice(0, 8);
+
+  // Mapeo de partidos R32 que reciben un tercer puesto
+  const THIRD_MATCH_IDS = [74, 77, 79, 80, 81, 82, 85, 87];
+
+  // 5. Intentar usar tabla Annex C si está disponible
+  if (annexCTable && annexCTable.lookup) {
+    const qualifyingGroups = top8.map(t => t.group).sort();
+    const key = qualifyingGroups.join(',');
+    const row = annexCTable.lookup[key];
+
+    if (row) {
+      const SLOT_TO_MATCH = {
+        '1A': 79, '1B': 85, '1D': 81, '1E': 74,
+        '1G': 82, '1I': 77, '1K': 87, '1L': 80
+      };
+
+      Object.keys(row.assignments).forEach(slot => {
+        const groupLetter = row.assignments[slot];
+        const matchId = SLOT_TO_MATCH[slot];
+        if (!matchId) return;
+
+        const thirdEntry = top8.find(t => t.group === groupLetter);
+        if (thirdEntry) {
+          const team = teamMap[thirdEntry.teamId];
+          if (team) map[matchId] = team.name;
+        }
+      });
+
+      return map;
+    }
+  }
+
+  // 6. Fallback: asignar los 8 mejores terceros por orden de ranking
+  //    1° mejor → match 74, 2° → match 77, 3° → match 79, etc.
+  top8.forEach((third, i) => {
+    const matchId = THIRD_MATCH_IDS[i];
+    if (matchId && third) {
+      const team = teamMap[third.teamId];
+      if (team) map[matchId] = team.name;
+    }
+  });
+
+  return map;
+}
+
+function renderBracket(bracket, teamMap, savedResults, standings, thirdPlaceMap) {
   const container = document.getElementById('knockoutContainer');
   if (!container) return;
   container.innerHTML = '';
@@ -84,8 +167,8 @@ function renderBracket(bracket, teamMap, savedResults, standings) {
       const awaySource = match.awaySource || '?';
 
       // Resolver nombres de equipos a partir de resultados guardados previos
-      const homeLabel = resolveSource(homeSource, savedResults, bracket, standings, teamMap);
-      const awayLabel = resolveSource(awaySource, savedResults, bracket, standings, teamMap);
+      const homeLabel = resolveSource(homeSource, savedResults, bracket, standings, teamMap, thirdPlaceMap);
+      const awayLabel = resolveSource(awaySource, savedResults, bracket, standings, teamMap, thirdPlaceMap);
 
       const matchDiv = document.createElement('div');
       matchDiv.className = `knockout-match${saved.played ? ' played' : ''}`;
@@ -127,8 +210,9 @@ function renderBracket(bracket, teamMap, savedResults, standings) {
  * Si la fuente es "WNN" (ganador partido NN) y ese partido ya tiene resultado,
  * devuelve el nombre del equipo ganador.
  * Si es "1A", "2B", etc., devuelve el equipo que ocupa esa posición.
+ * Si es "3A/B/C/D/F" (tercer puesto), usa el mapa de Annex C si está disponible.
  */
-function resolveSource(source, savedResults, bracket, standings, teamMap) {
+function resolveSource(source, savedResults, bracket, standings, teamMap, thirdPlaceMap) {
   if (!source) return '?';
 
   // W73 → ganador del partido 73
@@ -159,7 +243,28 @@ function resolveSource(source, savedResults, bracket, standings, teamMap) {
     }
   }
 
+  // 3A/B/C/D/F, 3C/D/F/G/H, etc. → tercer puesto (resolución Annex C)
+  if (thirdPlaceMap && /^\d[A-Z]/.test(source)) {
+    const matchId = resolveMatchIdFromSource(source);
+    if (matchId && thirdPlaceMap[matchId]) {
+      return `${source} - ${thirdPlaceMap[matchId]}`;
+    }
+  }
+
   return source;
+}
+
+/**
+ * Determina el matchId de un partido R32 a partir de su awaySource (3A/B/C/D/F, etc.)
+ */
+function resolveMatchIdFromSource(source) {
+  // Mapear los awaySources de terceros a sus match IDs
+  const AWAY_SOURCE_TO_MATCH = {
+    '3A/B/C/D/F': 74, '3C/D/F/G/H': 77, '3C/E/F/H/I': 79,
+    '3E/H/I/J/K': 80, '3B/E/F/I/J': 81, '3A/E/H/I/J': 82,
+    '3E/F/G/I/J': 85, '3D/E/I/J/L': 87
+  };
+  return AWAY_SOURCE_TO_MATCH[source] || null;
 }
 
 /**
@@ -199,7 +304,7 @@ function calculateStandings(groups, matches, teamMap) {
 
 /* ────────────── Eventos para guardar resultados ────────────── */
 
-function setupSaveHandlers(bracket, teamMap, savedResults, standings) {
+function setupSaveHandlers(bracket, teamMap, savedResults, standings, thirdPlaceMap) {
   const container = document.getElementById('knockoutContainer');
   if (!container) return;
 
@@ -247,7 +352,7 @@ function setupSaveHandlers(bracket, teamMap, savedResults, standings) {
     }
 
     // Re-renderizar para actualizar fuentes
-    renderBracket(bracket, teamMap, savedResults, standings);
+    renderBracket(bracket, teamMap, savedResults, standings, thirdPlaceMap);
   });
 }
 

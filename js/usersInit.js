@@ -7,19 +7,30 @@ document.addEventListener('DOMContentLoaded', async () => {
   const ROOT = '../';
 
   // Cargar datos iniciales
-  let users = loadFromStorage('users') || [];
-  let bets = loadFromStorage('bets') || [];
+  let users = await loadFromStorage('users') || [];
+  let bets = await loadFromStorage('bets') || [];
+
+  // Normalizar IDs a número (en los JSON vienen como strings y los URL params
+  // se convierten con parseInt, causando mismatch en comparaciones estrictas)
+  users.forEach(u => u.id = Number(u.id));
+  bets.forEach(b => { b.id = Number(b.id); b.userId = Number(b.userId); });
 
   let editingUserId = null;
 
   // Si no hay datos en storage (primera vez), se cargan de los JSON y se guardan en storage para iniciar el CRUD
   if (users.length === 0) {
     try { users = await loadData('users', ROOT); } catch(e) { users = []; console.log("Iniciando con usuarios vacíos"); }
-    if (users.length > 0) saveToStorage('users', users);
+    if (users.length > 0) {
+      users.forEach(u => u.id = Number(u.id));
+      saveToStorage('users', users);
+    }
   }
   if (bets.length === 0) {
     try { bets = await loadData('bets', ROOT); } catch(e) { bets = []; console.log("Iniciando con apuestas vacías"); }
-    if (bets.length > 0) saveToStorage('bets', bets);
+    if (bets.length > 0) {
+      bets.forEach(b => { b.id = Number(b.id); b.userId = Number(b.userId); });
+      saveToStorage('bets', bets);
+    }
   }
 
   const renderUsers = () => {

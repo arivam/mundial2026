@@ -1,15 +1,25 @@
 {
   "name": "mundial2026-polla",
   "version": "1.0.0",
-  "description": "Aplicación web de Polla Mundial 2026 con persistencia en JSON",
-  "main": "index.js",
+  "description": "Polla Mundial 2026 - Aplicación de escritorio con Electron + SQLite",
+  "main": "main.js",
   "scripts": {
-    "dev": "npx http-server . -p 8080",
-    "init": "node init_data.js"
+    "start": "electron .",
+    "dev": "electron .",
+    "init": "node init_data.js",
+    "test": "jest --verbose"
   },
   "author": "",
   "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^11.7.0",
+    "chart.js": "^4.4.0",
+    "cheerio": "^1.0.0",
+    "electron": "^28.3.3",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8"
+  },
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "jest": "^30.4.2"
   }
 }

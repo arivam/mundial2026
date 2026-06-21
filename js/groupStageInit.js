@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Restaurar marcadores guardados en localStorage
-  const savedMatches = loadFromStorage('matches');
+  const savedMatches = await loadFromStorage('matches');
   if (savedMatches) {
     // Combinar scores guardados con la estructura original
     savedMatches.forEach(saved => {

@@ -21,6 +21,14 @@ export class KnockoutMatch {
     }
     this.homeGoals = homeGoals;
     this.awayGoals = awayGoals;
-    this.winner = homeGoals > awayGoals ? this.homeTeam : awayGoals > homeGoals ? this.awayTeam : null; // tie = null (no extra time handling)
+    this.winner = homeGoals > awayGoals ? this.homeTeam : awayGoals > homeGoals ? this.awayTeam : null;
+  }
+
+  /** Returns the winning team object, or null if draw/not played */
+  getWinner() {
+    if (this.homeGoals === null || this.awayGoals === null) return null;
+    if (this.homeGoals > this.awayGoals) return this.homeTeam;
+    if (this.awayGoals > this.homeGoals) return this.awayTeam;
+    return null;
   }
 }

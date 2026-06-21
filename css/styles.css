@@ -35,6 +35,23 @@ header {
   z-index: 1000;
 }
 
+.nav-link {
+  color: white;
+  text-decoration: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.nav-link.active {
+  background: rgba(255, 255, 255, 0.2);
+  font-weight: 600;
+}
+
 button.toggle-theme {
   background: transparent;
   border: 2px solid white;
@@ -285,3 +302,20 @@ main {
 .btn-secondary:hover { background-color: #7f8c8d; }
 .btn-link { text-decoration: none; color: var(--color-primary); font-weight: 500; }
 .btn-link:hover { text-decoration: underline; }
+
+/* ── Ranking table ── */
+.ranking-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.ranking-table th, .ranking-table td { padding: 0.4rem 0.6rem; border-bottom: 1px solid rgba(0,0,0,0.08); text-align: center; }
+.ranking-table th { background: var(--color-primary); color: white; font-weight: 600; position: sticky; top: 0; }
+.ranking-table td:first-child, .ranking-table th:first-child { text-align: center; width: 36px; }
+.ranking-table td:nth-child(2) { text-align: left; }
+.ranking-table tbody tr:hover { background: rgba(0,0,0,0.04); }
+.ranking-table .top-three { background: rgba(52, 152, 219, 0.08); }
+.ranking-table .pos-cell { font-weight: 700; color: var(--color-primary); }
+.ranking-table-wrapper { max-height: 600px; overflow-y: auto; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; }
+
+/* ── Stats summary cards ── */
+.stats-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.stat-card { background: var(--color-primary); color: white; border-radius: 8px; padding: 1rem; text-align: center; }
+.stat-value { font-size: 1.8rem; font-weight: 700; }
+.stat-label { font-size: 0.8rem; opacity: 0.85; margin-top: 0.3rem; }

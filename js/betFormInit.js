@@ -21,12 +21,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  let users = loadFromStorage('users') || [];
-  let bets = loadFromStorage('bets') || [];
+  let users = await loadFromStorage('users') || [];
+  let bets = await loadFromStorage('bets') || [];
+
+  // Normalizar IDs a número (en los JSON vienen como strings y los URL params
+  // se convierten con parseInt, causando mismatch en comparaciones estrictas)
+  users.forEach(u => u.id = Number(u.id));
+  bets.forEach(b => { b.id = Number(b.id); b.userId = Number(b.userId); });
 
   // Sincronización con archivos JSON si el storage está vacío
-  if (users.length === 0) try { users = await loadData('users', ROOT); } catch(e) {}
-  if (bets.length === 0) try { bets = await loadData('bets', ROOT); } catch(e) {}
+  if (users.length === 0) try {
+    users = await loadData('users', ROOT);
+    users.forEach(u => u.id = Number(u.id));
+  } catch(e) {}
+  if (bets.length === 0) try {
+    bets = await loadData('bets', ROOT);
+    bets.forEach(b => { b.id = Number(b.id); b.userId = Number(b.userId); });
+  } catch(e) {}
 
   const user = users.find(u => u.id === userId);
   const bet = bets.find(b => b.id === betId);
