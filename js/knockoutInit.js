@@ -6,15 +6,14 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const ROOT = '../';
 
-  let bracket, teams, groups, groupMatches, annexCTable;
+  let bracket, teams, groups, groupMatches;
 
   try {
-    [bracket, teams, groups, groupMatches, annexCTable] = await Promise.all([
+    [bracket, teams, groups, groupMatches] = await Promise.all([
       loadData('knockout', ROOT),
       loadData('teams', ROOT),
       loadData('groups', ROOT),
-      loadData('matches', ROOT),
-      loadData('annex_c_table', ROOT)
+      loadData('matches', ROOT)
     ]);
   } catch (err) {
     console.error('Error cargando datos de eliminatorias:', err);
@@ -41,11 +40,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Calcular posiciones actuales de los grupos
   const standings = calculateStandings(groups, groupMatches, teamMap);
 
-  // Resolver terceros puestos (mejores 8 de 12 grupos)
-  const thirdPlaceMap = resolveThirdPlaceMap(standings, teamMap, annexCTable);
-
-  renderBracket(bracket, teamMap, savedResults, standings, thirdPlaceMap);
-  setupSaveHandlers(bracket, teamMap, savedResults, standings, thirdPlaceMap);
+  renderBracket(bracket, teamMap, savedResults, standings);
+  setupSaveHandlers(bracket, teamMap, savedResults, standings);
 });
 
 /* ────────────── Renderizado del bracket ────────────── */
@@ -140,7 +136,7 @@ function resolveThirdPlaceMap(standings, teamMap, annexCTable) {
   return map;
 }
 
-function renderBracket(bracket, teamMap, savedResults, standings, thirdPlaceMap) {
+function renderBracket(bracket, teamMap, savedResults, standings) {
   const container = document.getElementById('knockoutContainer');
   if (!container) return;
   container.innerHTML = '';
@@ -166,14 +162,19 @@ function renderBracket(bracket, teamMap, savedResults, standings, thirdPlaceMap)
       const homeSource = match.homeSource || '?';
       const awaySource = match.awaySource || '?';
 
-      // Resolver nombres de equipos a partir de resultados guardados previos
-      const homeLabel = resolveSource(homeSource, savedResults, bracket, standings, teamMap, thirdPlaceMap);
-      const awayLabel = resolveSource(awaySource, savedResults, bracket, standings, teamMap, thirdPlaceMap);
+      const homeLabel = resolveSource(homeSource, savedResults, bracket, standings, teamMap);
+      const awayLabel = resolveSource(awaySource, savedResults, bracket, standings, teamMap);
+
+      const isThirdPlaceAway = /^3[A-Z]/.test(awaySource);
 
       const matchDiv = document.createElement('div');
       matchDiv.className = `knockout-match${saved.played ? ' played' : ''}`;
       matchDiv.dataset.matchId = match.id;
       matchDiv.dataset.roundKey = roundKey;
+
+      const awayHtml = isThirdPlaceAway
+        ? renderThirdPlaceSelect(match.id, awaySource, standings, teamMap, savedResults._thirdPlaceSelections)
+        : `<span class="ko-team-name">${awayLabel}</span>`;
 
       matchDiv.innerHTML = `
         <div class="ko-match-header">Partido ${match.id}</div>
@@ -189,7 +190,7 @@ function renderBracket(bracket, teamMap, savedResults, standings, thirdPlaceMap)
             <input type="number" class="score-input ko-away-score" min="0" max="99"
               value="${saved.awayScore !== undefined ? saved.awayScore : ''}"
               placeholder="-" data-match-id="${match.id}" data-side="away">
-            <span class="ko-team-name">${awayLabel}</span>
+            ${awayHtml}
           </div>
         </div>
         ${match.winnerTo ? `<div class="ko-winner-to">Ganador → Partido ${match.winnerTo}</div>` : ''}
@@ -205,6 +206,69 @@ function renderBracket(bracket, teamMap, savedResults, standings, thirdPlaceMap)
   });
 }
 
+/* ────────────── Selectores de terceros puestos ────────────── */
+
+/**
+ * Parsea "3A/B/C/D/F" → ["A","B","C","D","F"]
+ */
+function getThirdPlaceGroups(source) {
+  const m = source.match(/^3([A-Z](?:\/[A-Z])*)$/);
+  return m ? m[1].split('/') : null;
+}
+
+/**
+ * Genera el HTML de un <select> con los terceros puestos disponibles
+ * para un partido de Ronda de 32.
+ */
+function renderThirdPlaceSelect(matchId, awaySource, standings, teamMap, selections) {
+  const groups = getThirdPlaceGroups(awaySource);
+  if (!groups) return '<span class="ko-team-name">?</span>';
+
+  const sel = selections || {};
+  const selectedId = sel[matchId] ? Number(sel[matchId]) : null;
+  const usedTeamIds = new Set();
+  Object.values(sel).forEach(tid => { if (tid) usedTeamIds.add(Number(tid)); });
+
+  let html = `<select class="third-place-select" data-match-id="${matchId}">`;
+  html += '<option value="">— 3er puesto —</option>';
+
+  groups.forEach(groupName => {
+    const pos = standings[groupName];
+    if (!pos || !pos[2]) return;
+    const team = teamMap[pos[2].teamId];
+    if (!team) return;
+
+    const tid = Number(team.id);
+    const disabled = usedTeamIds.has(tid) && tid !== selectedId;
+    const selected = tid === selectedId;
+    html += `<option value="${tid}"${selected ? ' selected' : ''}${disabled ? ' disabled' : ''}>${groupName} - ${team.name}</option>`;
+  });
+
+  html += '</select>';
+  return html;
+}
+
+/**
+ * Re-fresca los options de todos los dropdowns de terceros, inhabilitando
+ * equipos ya seleccionados en otros partidos (sin duplicados).
+ */
+function refreshThirdPlaceDropdowns(standings, teamMap, savedResults) {
+  const selections = savedResults._thirdPlaceSelections || {};
+  const usedTeamIds = new Set();
+  Object.values(selections).forEach(tid => { if (tid) usedTeamIds.add(Number(tid)); });
+
+  document.querySelectorAll('.third-place-select').forEach(select => {
+    const matchId = Number(select.dataset.matchId);
+    const currentId = Number(select.value);
+
+    Array.from(select.options).forEach(option => {
+      if (!option.value) return;
+      const tid = Number(option.value);
+      option.disabled = usedTeamIds.has(tid) && tid !== currentId;
+    });
+  });
+}
+
 /**
  * Intenta resolver la etiqueta de origen a un nombre de equipo.
  * Si la fuente es "WNN" (ganador partido NN) y ese partido ya tiene resultado,
@@ -212,7 +276,7 @@ function renderBracket(bracket, teamMap, savedResults, standings, thirdPlaceMap)
  * Si es "1A", "2B", etc., devuelve el equipo que ocupa esa posición.
  * Si es "3A/B/C/D/F" (tercer puesto), usa el mapa de Annex C si está disponible.
  */
-function resolveSource(source, savedResults, bracket, standings, teamMap, thirdPlaceMap) {
+function resolveSource(source, savedResults, bracket, standings, teamMap) {
   if (!source) return '?';
 
   // W73 → ganador del partido 73
@@ -240,14 +304,6 @@ function resolveSource(source, savedResults, bracket, standings, teamMap, thirdP
     if (groupStandings && groupStandings[pos - 1]) {
       const team = teamMap[groupStandings[pos - 1].teamId];
       return team ? `${source} - ${team.name}` : source;
-    }
-  }
-
-  // 3A/B/C/D/F, 3C/D/F/G/H, etc. → tercer puesto (resolución Annex C)
-  if (thirdPlaceMap && /^\d[A-Z]/.test(source)) {
-    const matchId = resolveMatchIdFromSource(source);
-    if (matchId && thirdPlaceMap[matchId]) {
-      return `${source} - ${thirdPlaceMap[matchId]}`;
     }
   }
 
@@ -304,10 +360,28 @@ function calculateStandings(groups, matches, teamMap) {
 
 /* ────────────── Eventos para guardar resultados ────────────── */
 
-function setupSaveHandlers(bracket, teamMap, savedResults, standings, thirdPlaceMap) {
+function setupSaveHandlers(bracket, teamMap, savedResults, standings) {
   const container = document.getElementById('knockoutContainer');
   if (!container) return;
 
+  // Cambio en selector de tercer puesto
+  container.addEventListener('change', e => {
+    const select = e.target.closest('.third-place-select');
+    if (!select) return;
+
+    const matchId = Number(select.dataset.matchId);
+    const teamId = select.value ? Number(select.value) : null;
+
+    if (!savedResults._thirdPlaceSelections) {
+      savedResults._thirdPlaceSelections = {};
+    }
+    savedResults._thirdPlaceSelections[matchId] = teamId;
+    saveToStorage('knockout', savedResults);
+
+    refreshThirdPlaceDropdowns(standings, teamMap, savedResults);
+  });
+
+  // Guardar marcador
   container.addEventListener('click', e => {
     const btn = e.target.closest('.ko-save-btn');
     if (!btn) return;
@@ -330,8 +404,15 @@ function setupSaveHandlers(bracket, teamMap, savedResults, standings, thirdPlace
 
     const homeNameEl = matchDiv.querySelector('.ko-team.home .ko-team-name');
     const awayNameEl = matchDiv.querySelector('.ko-team.away .ko-team-name');
+    const awaySelect = matchDiv.querySelector('.ko-team.away .third-place-select');
+
     const homeName = homeNameEl ? homeNameEl.textContent.trim() : '?';
-    const awayName = awayNameEl ? awayNameEl.textContent.trim() : '?';
+    let awayName = '?';
+    if (awaySelect && awaySelect.value) {
+      awayName = awaySelect.options[awaySelect.selectedIndex].textContent.trim();
+    } else if (awayNameEl) {
+      awayName = awayNameEl.textContent.trim();
+    }
 
     const winner = hs > as_ ? homeName : (as_ > hs ? awayName : null);
     const loser = hs > as_ ? awayName : (as_ > hs ? homeName : null);
@@ -352,7 +433,7 @@ function setupSaveHandlers(bracket, teamMap, savedResults, standings, thirdPlace
     }
 
     // Re-renderizar para actualizar fuentes
-    renderBracket(bracket, teamMap, savedResults, standings, thirdPlaceMap);
+    renderBracket(bracket, teamMap, savedResults, standings);
   });
 }
 
