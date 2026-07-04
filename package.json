@@ -13,13 +13,14 @@
   "license": "MIT",
   "dependencies": {
     "better-sqlite3": "^11.7.0",
-    "chart.js": "^4.4.0",
-    "cheerio": "^1.0.0",
+    "chart.js": "^4.5.1",
+    "cheerio": "^1.2.0",
     "electron": "^28.3.3",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.8"
   },
   "devDependencies": {
+    "@electron/rebuild": "^4.1.0",
     "jest": "^30.4.2"
   }
 }

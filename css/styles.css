@@ -283,6 +283,17 @@ main {
 .ko-vs { font-weight: bold; color: var(--color-primary); opacity: 0.7; }
 .ko-teams .score-input { width: 50px; }
 .ko-match-header { font-size: 0.75rem; opacity: 0.6; margin-bottom: 0.2rem; }
+.ko-penalties {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+  font-size: 0.85rem;
+}
+.ko-penalties .score-input { width: 36px; }
+.ko-penalties-label { font-weight: 500; opacity: 0.7; margin-right: 0.3rem; }
+.ko-penalties .ko-vs { font-size: 0.8rem; }
 
 /* Estilos para la gestión de apuestas en el módulo de Usuarios */
 .bet-item-row {

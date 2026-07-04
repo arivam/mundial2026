@@ -40,13 +40,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   let users = await loadFromStorage('users') || [];
   let bets = await loadFromStorage('bets') || [];
 
+  // Normalizar IDs a número para evitar mismatch de tipos entre páginas
+  users.forEach(u => u.id = Number(u.id));
+  bets.forEach(b => { b.id = Number(b.id); b.userId = Number(b.userId); });
+
   if (users.length === 0) {
-    try { users = await loadData('users', ROOT); } catch(e) {}
-    if (users.length > 0) saveToStorage('users', users);
+    try { users = await loadData('users', ROOT); } catch(e) { users = []; }
+    if (users.length > 0) {
+      users.forEach(u => u.id = Number(u.id));
+      saveToStorage('users', users);
+    }
   }
   if (bets.length === 0) {
-    try { bets = await loadData('bets', ROOT); } catch(e) {}
-    if (bets.length > 0) saveToStorage('bets', bets);
+    try { bets = await loadData('bets', ROOT); } catch(e) { bets = []; }
+    if (bets.length > 0) {
+      bets.forEach(b => { b.id = Number(b.id); b.userId = Number(b.userId); });
+      saveToStorage('bets', bets);
+    }
   }
 
   const knockoutResults = await loadFromStorage('knockout') || {};

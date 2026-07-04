@@ -176,6 +176,9 @@ function renderBracket(bracket, teamMap, savedResults, standings) {
         ? renderThirdPlaceSelect(match.id, awaySource, standings, teamMap, savedResults._thirdPlaceSelections)
         : `<span class="ko-team-name">${awayLabel}</span>`;
 
+      const hasPenalties = saved.penaltiesHome !== undefined && saved.penaltiesAway !== undefined;
+      const penStyle = hasPenalties ? '' : ' style="display:none"';
+
       matchDiv.innerHTML = `
         <div class="ko-match-header">Partido ${match.id}</div>
         <div class="ko-teams">
@@ -192,6 +195,16 @@ function renderBracket(bracket, teamMap, savedResults, standings) {
               placeholder="-" data-match-id="${match.id}" data-side="away">
             ${awayHtml}
           </div>
+        </div>
+        <div class="ko-penalties"${penStyle}>
+          <span class="ko-penalties-label">Penales:</span>
+          <input type="number" class="score-input ko-pen-home" min="0" max="99"
+            value="${saved.penaltiesHome !== undefined ? saved.penaltiesHome : ''}"
+            placeholder="-" data-match-id="${match.id}">
+          <span class="ko-vs">-</span>
+          <input type="number" class="score-input ko-pen-away" min="0" max="99"
+            value="${saved.penaltiesAway !== undefined ? saved.penaltiesAway : ''}"
+            placeholder="-" data-match-id="${match.id}">
         </div>
         ${match.winnerTo ? `<div class="ko-winner-to">Ganador → Partido ${match.winnerTo}</div>` : ''}
         ${match.loserTo ? `<div class="ko-loser-to">Perdedor → Partido ${match.loserTo}</div>` : ''}
@@ -284,7 +297,7 @@ function resolveSource(source, savedResults, bracket, standings, teamMap) {
   if (winnerMatch) {
     const matchId = +winnerMatch[1];
     const saved = savedResults[matchId];
-    return (saved && saved.played && saved.winner) ? `Gan. P${matchId} - ${saved.winner}` : `Gan. P${matchId}`;
+    return (saved && saved.played && saved.winner) ? `Gan. P${matchId} - ${saved.winner.split(' - ').pop()}` : `Gan. P${matchId}`;
   }
 
   // L101 → perdedor del partido 101
@@ -292,7 +305,7 @@ function resolveSource(source, savedResults, bracket, standings, teamMap) {
   if (loserMatch) {
     const matchId = +loserMatch[1];
     const saved = savedResults[matchId];
-    return (saved && saved.played && saved.loser) ? `Per. P${matchId} - ${saved.loser}` : `Per. P${matchId}`;
+    return (saved && saved.played && saved.loser) ? `Per. P${matchId} - ${saved.loser.split(' - ').pop()}` : `Per. P${matchId}`;
   }
 
   // 1A, 2B, 3C… → posición del grupo
@@ -364,6 +377,28 @@ function setupSaveHandlers(bracket, teamMap, savedResults, standings) {
   const container = document.getElementById('knockoutContainer');
   if (!container) return;
 
+  // Mostrar/ocultar penales cuando los marcadores son iguales
+  container.addEventListener('input', e => {
+    const input = e.target.closest('.ko-home-score, .ko-away-score');
+    if (!input) return;
+
+    const matchDiv = input.closest('.knockout-match');
+    if (!matchDiv) return;
+    const homeInput = matchDiv.querySelector('.ko-home-score');
+    const awayInput = matchDiv.querySelector('.ko-away-score');
+    const penSection = matchDiv.querySelector('.ko-penalties');
+
+    if (homeInput && awayInput && penSection) {
+      const hs = homeInput.value.trim();
+      const as = awayInput.value.trim();
+      if (hs !== '' && as !== '' && hs === as) {
+        penSection.style.display = 'flex';
+      } else {
+        penSection.style.display = 'none';
+      }
+    }
+  });
+
   // Cambio en selector de tercer puesto
   container.addEventListener('change', e => {
     const select = e.target.closest('.third-place-select');
@@ -395,7 +430,7 @@ function setupSaveHandlers(bracket, teamMap, savedResults, standings) {
     const asStr = awayInput.value.trim();
 
     if (hsStr === '' || asStr === '' || isNaN(parseInt(hsStr)) || isNaN(parseInt(asStr))) {
-      alert('Los marcadores deben ser números enteros no negativos (sin empates en eliminatorias, ingresa el marcador de penales).');
+      alert('Los marcadores deben ser números enteros no negativos.');
       return;
     }
 
@@ -406,31 +441,67 @@ function setupSaveHandlers(bracket, teamMap, savedResults, standings) {
     const awayNameEl = matchDiv.querySelector('.ko-team.away .ko-team-name');
     const awaySelect = matchDiv.querySelector('.ko-team.away .third-place-select');
 
-    const homeName = homeNameEl ? homeNameEl.textContent.trim() : '?';
+    const homeName = homeNameEl ? homeNameEl.textContent.trim().split(' - ').pop() : '?';
     let awayName = '?';
     if (awaySelect && awaySelect.value) {
-      awayName = awaySelect.options[awaySelect.selectedIndex].textContent.trim();
+      awayName = awaySelect.options[awaySelect.selectedIndex].textContent.trim().split(' - ').pop();
     } else if (awayNameEl) {
-      awayName = awayNameEl.textContent.trim();
+      awayName = awayNameEl.textContent.trim().split(' - ').pop();
     }
 
-    const winner = hs > as_ ? homeName : (as_ > hs ? awayName : null);
-    const loser = hs > as_ ? awayName : (as_ > hs ? homeName : null);
+    let winner, loser;
+    let penaltiesHome, penaltiesAway;
 
-    savedResults[matchId] = {
+    if (hs > as_) {
+      winner = homeName;
+      loser = awayName;
+    } else if (as_ > hs) {
+      winner = awayName;
+      loser = homeName;
+    } else {
+      const penHomeInput = matchDiv.querySelector('.ko-pen-home');
+      const penAwayInput = matchDiv.querySelector('.ko-pen-away');
+      const phStr = penHomeInput ? penHomeInput.value.trim() : '';
+      const paStr = penAwayInput ? penAwayInput.value.trim() : '';
+
+      if (phStr === '' || paStr === '' || isNaN(parseInt(phStr)) || isNaN(parseInt(paStr))) {
+        alert('El partido terminó empatado. Ingresa el marcador de penales para determinar el ganador.');
+        return;
+      }
+
+      penaltiesHome = parseInt(phStr, 10);
+      penaltiesAway = parseInt(paStr, 10);
+
+      if (penaltiesHome === penaltiesAway) {
+        alert('Los penales no pueden quedar empatados. Debe haber un ganador.');
+        return;
+      }
+
+      if (penaltiesHome > penaltiesAway) {
+        winner = homeName;
+        loser = awayName;
+      } else {
+        winner = awayName;
+        loser = homeName;
+      }
+    }
+
+    const result = {
       homeScore: hs, awayScore: as_,
       played: true,
       winner, loser
     };
+    if (penaltiesHome !== undefined) {
+      result.penaltiesHome = penaltiesHome;
+      result.penaltiesAway = penaltiesAway;
+    }
+
+    savedResults[matchId] = result;
 
     saveToStorage('knockout', savedResults);
     matchDiv.classList.add('played');
 
-    if (winner) {
-      alert(`✅ Resultado guardado. Ganador: ${winner}`);
-    } else {
-      alert('✅ Resultado guardado (empate registrado – verifica penales).');
-    }
+    alert(`✅ Resultado guardado. Ganador: ${winner}`);
 
     // Re-renderizar para actualizar fuentes
     renderBracket(bracket, teamMap, savedResults, standings);
