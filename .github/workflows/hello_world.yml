@@ -20,22 +20,28 @@ jobs:
       #mensaje_salida: ${{ steps.crear_output.outputs.saludo_custom }}
 
     steps:
+      - name: Imprime fecha
+        run: date
+      
       - name: Comandos simples y Variables de Contexto de GitHub
         run: |
           echo "¡Hola mundo desde GitHub Actions!"
-          echo "Fecha actual: $(date)"
+          echo "Runner architecture: $RUNNER_ARCH"
           echo "Ejecutado por el usuario: $GITHUB_ACTOR"
           echo "Sistema Operativo: $RUNNER_OS"
 
-      - name: Script multilínea
+      - name: Impresion multilínea
         run: |
           echo "--- Inicio script multilínea ---"
           echo "Evento disparador: $GITHUB_EVENT_NAME"
           echo "--- Fin script multilínea ---"
 
-      - name: Generar datos usando $GITHUB_OUTPUT
-        id: crear_output
-        run: echo "saludo_custom=Hola desde el Job Saludo" >> $GITHUB_OUTPUT
+      - name: Multi-line script
+        id: script
+        run: |
+          for i in {1..3}; do
+            echo "Loop iteracion $i"
+          done
 
   # Job 2: Reuso del output y Reusable Actions
   #procesar:
