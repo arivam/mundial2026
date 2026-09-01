@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
 
     # 4. Outputs: Exportar un dato generado para otros jobs
-    outputs:
-      mensaje_salida: ${{ steps.crear_output.outputs.saludo_custom }}
+    #outputs:
+      #mensaje_salida: ${{ steps.crear_output.outputs.saludo_custom }}
 
     steps:
       - name: Comandos simples y Variables de Contexto de GitHub
@@ -38,19 +38,19 @@ jobs:
         run: echo "saludo_custom=Hola desde el Job Saludo" >> $GITHUB_OUTPUT
 
   # Job 2: Reuso del output y Reusable Actions
-  procesar:
-    runs-on: ubuntu-latest
-    needs: saludo # Espera a que termine el job anterior
+  #procesar:
+    #runs-on: ubuntu-latest
+    #needs: saludo # Espera a que termine el job anterior
 
-    steps:
-      - name: Checkout del código (Necesario para usar acciones locales)
-        uses: actions/checkout@v4
+    #steps:
+      #- name: Checkout del código (Necesario para usar acciones locales)
+        #uses: actions/checkout@v4
 
-      - name: Mostrar output recibido del Job 1
-        run: echo "Mensaje recibido: ${{ needs.saludo.outputs.mensaje_salida }}"
+      #- name: Mostrar output recibido del Job 1
+        #run: echo "Mensaje recibido: ${{ needs.saludo.outputs.mensaje_salida }}"
 
-      # 5. Reusable actions: Usar una acción estándar de la comunidad (ejemplo reutilizable de GitHub)
-      - name: Saludar con una acción reutilizable de la comunidad
-        uses: actions/hello-world-javascript-action@v1.1
-        with:
-          who-to-greet: ${{ github.actor }}
+      #5. Reusable actions: Usar una acción estándar de la comunidad (ejemplo reutilizable de GitHub)
+      #- name: Saludar con una acción reutilizable de la comunidad
+        #uses: actions/hello-world-javascript-action@v1.1
+        #with:
+          #who-to-greet: ${{ github.actor }}
